@@ -1,0 +1,1253 @@
+---
+title: "Assignment 01 - Solutions"
+subtitle: "Statistical Computing and Empirical Methods"
+author: "YOUR NAME HERE"
+output:
+  html_document:
+  toc: true
+toc_depth: 2
+---
+
+*****
+
+In this first lab session you will become familiar with the basic building
+blocks of the R language. By the end of this lab you should be able to
+
+- create and manipulate R objects
+- understand the main data types used in R
+- work with vectors, matrices, lists and data frames
+- inspect the structure of R objects
+- subset objects using indexing
+- understand how R performs automatic type conversion (coercion)
+
+Throughout this lab exercise you are encouraged to experiment with the code.
+Modify values, change function arguments, and check what happens. Learning R
+is much easier if you actively explore the language rather than simply copying
+commands.
+
+
+
+### Before you begin
+
+Open **RStudio** and open the Rmarkdown document provided for this week. Unless otherwise stated, execute every code chunk and make sure you understand its output before moving on.
+
+> **Tip**
+>
+> If something unexpected happens, don't panic! Read the error message
+> carefully. It often tells you exactly what went wrong.
+
+*****
+
+# Part I: basic R 
+
+At the R prompt, everything you type is an **expression**.
+
+Run the following code.
+
+```{r}
+x <- 10 # using `<-` for attribution 
+y = 5   # using `=` for atribution. Both work just fine.
+
+x
+
+z <- x + y   # attribution by itself does not print anything to the command line
+x * y        # Operations without attribution print results by default
+(w <- x / z) # If you enclose your attribution in parentheses it attributes and prints
+```
+
+Both `<-` and `=` assign a value to an object. 
+
+`<-` is the older / classic attribution operator which I (Felipe) use more often - mainly because I'm **old** :). R has accepted the more standard `=` as an attribution operator for many years. Feel free to use whichever you prefer.
+
+
+### Exercise 1
+
+Create two new variables called `a` and `b`, assigning them the values 7 and 13.
+
+Calculate
+
+- their sum;
+- their product;
+- the square of `a`.
+
+```{r ex01}
+# Write your code in this code block
+a = 7
+b= 13
+a+b
+a*b
+a*a
+
+
+```
+
+
+
+## Basic data types
+
+R contains several fundamental data types.
+
+Run the following code.
+
+```{r}
+x <- 3.14
+y <- 5L
+z <- "Statistics"
+w <- TRUE
+
+class(x)
+class(y)
+class(z)
+class(w)
+```
+
+You should observe four common classes:
+
+- `numeric`
+- `integer`
+- `character`
+- `logical`
+
+These classes form the basis of almost every object you will use later in the
+course.
+
+## Special numerical values
+
+Run the following commands.
+
+```{r}
+1 / 0
+
+0 / 0
+
+sqrt(-1)
+```
+
+Notice the appearance of special values such as
+
+- `Inf`
+- `NaN`
+
+These represent mathematical quantities that cannot be expressed as ordinary
+numbers.
+
+### Exercise 2
+
+Predict the class of each object before running the code.
+
+```{r ex02}
+
+class(FALSE) #logical
+
+class("123") #character
+
+class(123) #numeric
+
+class(123L) #integer
+```
+
+Were your predictions correct?
+
+
+## Vectors
+
+Vectors are probably the most fundamental data structure in R.
+
+```{r}
+temperatures <- c(18.4, 19.2, 21.1, 20.3, 22.0)
+
+temperatures
+```
+
+Check its `class` and `length` attributes.
+
+```{r}
+class(temperatures)
+
+length(temperatures)
+```
+
+Individual vector elements can be extracted using square brackets.
+
+```{r}
+temperatures[1]
+
+temperatures[3]
+
+temperatures[c(2,4)] # you can pass a vector of indices
+
+temperatures[2:5]    # a:b produces an integer sequence from a to b.
+```
+
+**Important**: Remember that **R starts indexing at 1**, not 0. Try typing `temperatures[0]` to see what happens.
+
+
+### Exercise 3
+
+Create a vector containing the numbers
+
+```
+2 4 6 8 10 12
+```
+
+using whichever method you prefer. Store it in an object called `even_numbers` and print that object to the console.
+
+```{r ex03a}
+# Write your code in this code block
+even_numbers = c(2, 4, 6, 8, 10, 12)
+even_numbers
+
+```
+
+Using indexing only,
+
+1. extract the first element;
+2. extract the last element;
+3. extract the middle two elements.
+
+```{r ex03b}
+# Write your code in this code block
+even_numbers[1]
+even_numbers[6]
+even_numbers[c(3,4)]
+```
+
+Replace the fourth element of your vector by the value `100` and print the resulting vector.
+
+```{r ex03c}
+# Write your code in this code block
+even_numbers[4]=100
+even_numbers
+
+```
+
+## Automatic coercion
+
+Unlike many programming languages, R automatically converts data types whenever
+it thinks this is appropriate. Run the following examples.
+
+```{r}
+2 + TRUE
+
+FALSE + FALSE
+
+TRUE + TRUE
+```
+
+Can you explain the output?
+
+
+Now try
+
+```{r}
+c("A", "B", 5)
+
+c(TRUE, 1, FALSE)
+
+c(3.2, 7L)
+```
+
+Notice that all elements of a vector must belong to the same class. When different types are combined, R will try to coerce the values to the most general data type that still keeps them consistent.
+
+### Exercise 4
+
+Without running the code first, predict what each command will return.
+
+```{r}
+c(1, TRUE) #1 1 
+
+c("1", TRUE) # 1 TRUE
+
+c(5L, 2.5) # 5.0 2.5
+```
+
+Now execute the commands. Were your predictions correct?
+
+
+## Inspecting objects
+
+As objects become more complicated, simply printing them is often insufficient. The function `str()` can be quite useful in these cases. Try running:
+
+```{r}
+student <- list(name = "Alice",
+                age = 23,
+                passed = TRUE)
+
+student
+
+str(student)
+```
+
+`str()` displays the internal structure of the object rather than just printing its contents.
+
+### Exercise 5 (challenge)
+
+Create a list describing yourself. Include at least
+
+- your first name;
+- your age;
+- your favourite programming language;
+- whether you have previously used R.
+
+Store the result in an object called `mylist`. Then display its structure using `str()`.
+
+```{r ex05}
+# Write your code in this code block
+mylist = list (name = "Nicole",
+                age = 21,
+                'favourite programming language'= "Python",
+                'previously used R' = FALSE)
+
+str(mylist)
+
+```
+
+## Missing values
+
+Missing observations are represented by the special value `NA`. Run the following code:
+
+```{r}
+scores <- c(74, 68, NA, 91, 82)
+
+scores
+```
+
+You can check which elements are missing with:
+
+```{r}
+is.na(scores)
+```
+
+### Exercise 6
+
+What happens if you calculate the following expression?
+
+```{r}
+mean(scores)
+```
+
+Why does this happen? Can you find by either checking the function documentation, `?mean`, or your own experimentation, a way to calculate the mean while ignoring missing values?
+
+```{r ex06}
+mean (scores [c(1,2,4,5)])
+
+```
+
+# Exercise 7
+
+Suppose a researcher records the number of hours studied by six students.
+
+```{r}
+hours <- c(5, 7, 4, 8, NA, 6)
+```
+
+Without creating another vector and using only R functions, do the following:
+
+1. determine how many observations are missing;
+2. replace the missing value with 5;
+3. calculate the average number of study hours;
+4. replace every value greater than 6 by exactly 6.
+
+```{r ex07}
+# Write your code in this code block
+sum(is.na(hours))
+hours[is.na(hours)]=5
+mean(hours)
+hours[hours>6]=6
+
+```
+
+*****
+
+# Part II: R data structures
+
+## Matrices
+
+Matrices are essentially vectors with an additional **dimension** attribute. Create the following matrix.
+
+```{r}
+A <- matrix(1:12,
+            nrow = 3,
+            ncol = 4)
+
+A
+```
+
+Notice that the numbers are filled **column by column**. You can check its dimensions with:
+
+```{r}
+dim(A)
+nrow(A)
+ncol(A)
+```
+
+Accessing individual matrix values requires **two indices**, with the notation `[row, column]`:
+
+```{r}
+A[1, 1] # first row, first col
+A[3, 2] # third row, second col
+A[, 4]  # a blank index means "all elements along this dimension"
+A[2, ]
+A[1:2, c(1,4)] # you can also use vectors to index multiple elements
+```
+
+
+### Exercise 8
+
+Create the following matrix M using `matrix()`.
+
+$$
+M = \begin{bmatrix}
+1 & 2 & 3\\
+4 & 5 & 6\\
+7 & 8 & 9
+\end{bmatrix}
+$$
+
+Note that it will look differently in the R console. Your code will produce something that looks like this:
+
+```{r, eval=FALSE}
+[,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    4    5    6
+[3,]    7    8    9
+```
+
+**Hint**: look at the `byrow` argument of `matrix()` (use `?matrix` to access the function documentation).
+
+```{r ex08a}
+# Write your code in this code block
+A <- matrix(1:9,
+            nrow = 3,
+            ncol = 3,,
+            byrow=TRUE)
+
+A
+
+```
+
+Using indexing only,
+
+- extract the entire second row;
+- extract the entire first column;
+- extract the bottom-right element;
+- replace the centre element by 99.
+
+```{r ex08b}
+# Write your code in this code block
+A[1, ]
+A[ , 1]
+A[3,3]
+A[2,2]=99
+
+```
+
+*****
+
+You can inspect the attributes of a matrix using
+
+```{r}
+attributes(A)
+```
+
+Check what attributes a matrix possesses that a vector does not?
+
+
+## Lists
+
+Unlike vectors and matrices, **lists can contain objects of different types**. Run the following code:
+
+```{r}
+experiment <- list(researcher = "Alice",
+                   participants = 25,
+                   completed = TRUE,
+                   measurements = c(12.4, 14.2, 11.9))
+
+experiment
+```
+
+Now inspect its structure,
+
+```{r}
+str(experiment)
+```
+
+## Accessing list elements
+
+List elements can be accessed either by **name**
+
+```{r}
+experiment$researcher
+
+experiment$measurements
+```
+
+or by **position**, using double square brackets:
+
+```{r}
+experiment[[1]]
+
+experiment[[4]]
+```
+
+### Exercise 9
+
+Create a list describing one of your favourite films (or books). Include at least
+
+- title;
+- year;
+- genre;
+- rating out of 10;
+- three main actors (or characters).
+
+Store the result in an object called `movie`.
+
+```{r ex09a}
+# Write your code in this code block
+movie <- list(title = "A song of ice and fire",
+                   year = 2005,
+                   genre = "fantasy",
+                   'rating out of 10' = 9,
+                   'three main characters'="Daenarys Targaryen, Eddard Stark, Catelyn Stark")
+
+movie
+
+```
+
+Using your object `movie`,
+
+- print only the title;
+- print only the rating;
+- change the rating;
+- add a new element called `watched` with value `TRUE`.
+
+```{r ex09b}
+# Write your code in this code block
+movie ["title"]
+movie["rating out of 10"]
+movie["rating out of 10"]=8
+movie["watched"]=TRUE
+
+```
+
+What is the difference between the following two commands:
+
+```{r}
+movie[1]
+```
+
+and
+
+```{r}
+movie[[1]]
+```
+
+Try both commands, attribute each to one variable (use any name you prefer) and inspect the results with `class()`. Write one or two sentences explaining the difference.
+
+> Answer:
+> the movie [[1]] only gives the infromation about the element itself, wehreas movie [1] gives more information on the type of element it is in the list
+> 
+
+
+## Factors
+
+Many variables encountered in statistics are **categorical** rather than
+numerical. Examples include
+
+- country;
+- blood type;
+- species;
+- treatment group;
+- etc.
+
+In R these variables are usually stored as **factors**. Check the following:
+
+```{r}
+group <- c("Treatment",
+           "Treatment",
+           "Control",
+           "Treatment",
+           "Control")
+
+group
+```
+
+This is a simple character vector. To convert it into a factor, do:
+
+```{r}
+group_factor <- factor(group)
+
+group_factor
+```
+
+Inspect its structure.
+
+```{r}
+str(group_factor)
+
+levels(group_factor)
+```
+
+Although character vectors can also store text, factors provide R with
+additional information:
+
+- the set of valid values (levels);
+- whether the variable is categorical;
+- the order of categories (for ordered factors).
+
+Many statistical modelling functions rely on factor variables.
+
+### Exercise 10
+
+Create a factor representing the weekdays
+
+```
+Monday
+Tuesday
+Wednesday
+Thursday
+Friday
+```
+
+Store it in an object called `weekdays` and display its levels using `levels()`.
+
+```{r ex10a}
+# Write your code in this code block
+
+```
+
+Suppose a variable can take the following values:
+
+```
+Low
+Medium
+High
+```
+
+Create a factor with these values in the correct order.
+
+Hint: look at the description of the `levels` argument in `?factor`.
+
+```{r ex10b}
+# Write your code in this code block
+
+```
+
+# Data frames
+
+Most datasets used in data science are stored as **data frames**: 
+
+- Each row represents one observation;
+- Each column represents one variable.
+
+We can create a small data frame like this:
+
+```{r}
+students <- data.frame(Name = c("Alice", "Bob", "Carol", "David"),
+                       Age = c(22, 24, 23, 21),
+                       MSc = c(TRUE, TRUE, FALSE, TRUE))
+
+students
+```
+
+Inspect the object.
+
+```{r}
+class(students)
+
+str(students)
+
+names(students)
+```
+
+Columns may be accessed in several ways.
+
+```{r}
+students$Age
+
+students[["Age"]]
+
+students[, 2]
+```
+
+Rows can also be extracted.
+
+```{r}
+students[2, ]
+
+students[1:3, ]
+```
+
+### Exercise 11
+
+Add a new column called `Mark` to the dataframe above. Choose any four marks between 50 and 100 for the example students.
+
+```{r ex11a}
+# Write your code in this code block
+
+```
+
+Now calculate
+
+- the mean mark;
+- the maximum mark;
+- the minimum mark.
+
+```{r ex11b}
+# Write your code in this code block
+
+```
+
+Extract only the students whose mark is greater than 70.
+
+**Hint**: `students$Mark > 70` returns a logical vector that can be used for indexing.
+
+```{r ex11c}
+# Write your code in this code block
+
+```
+
+
+
+## Names and attributes
+
+Many R objects carry additional information called **attributes**. Inspect the attributes of your data frame:
+
+```{r}
+attributes(students)
+```
+
+Notice the presence of
+
+- row names;
+- column names;
+- class.
+
+### Exercise 12
+
+Rename the column `Mark` to `FinalMark`. **Hint**: `names(students)` can both display and be used to modify column names by attribution.
+
+```{r ex12}
+# Write your code in this code block
+
+```
+
+### Exercise 13 (challenge)
+
+Create a data frame describing five countries. Include the variables
+
+- Country
+- Population (millions)
+- Continent
+- EU_member (TRUE/FALSE)
+
+```{r ex13a}
+# Write your code in this code block
+
+```
+
+Then answer the following questions using R:
+
+1. Which country has the largest population?
+2. How many countries are EU members?
+3. What is the average population?
+4. Display only the countries not members of the EU.
+
+```{r ex13b}
+# Write your code in this code block
+
+```
+
+*****
+
+
+# Part III: Functions, conditionals and loops
+
+## Calling functions
+
+You have already used many R functions without thinking about them. For example,
+
+```{r}
+x <- c(3, 8, 5, 10, 12)
+
+length(x) # function `length()`
+mean(x)   
+sort(x)   
+summary(x)
+```
+
+Each function receives zero or more inputs (arguments), performs some computation, and returns some output. 
+
+Different functions accept different numbers of arguments - some required, some optional. For example,
+
+```{r}
+rnorm(5)
+
+rnorm(5, mean = 10)
+
+rnorm(mean = 10, n = 5, sd = 2)
+```
+
+Notice that arguments can be supplied by position or by name. Using argument names generally makes your code easier to read and less susceptible to hard-to-find bugs.
+
+### Exercise 14  
+
+Read the help page
+
+```r
+?runif
+```
+
+Now generate:
+
+- 20 random numbers between 0 and 1;
+- 20 random numbers between 5 and 10;
+- 100 random numbers between -2 and 2.
+
+```{r ex14}
+# Write your code in this code block
+
+```
+
+## Writing your first function
+
+Suppose that we frequently need to calculate the area of a rectangle. Rather than repeatedly writing:
+
+```r
+width * height
+```
+
+we can define a function.
+
+```{r}
+rectangle_area <- function(width, height){
+  area <- width * height
+  return(area)
+}
+```
+
+You can then call the function whenever it's needed:
+
+```{r}
+rectangle_area(4, 5)
+rectangle_area(width  = 10, height = 3)
+```
+
+Notice the general structure.
+
+```r
+name <- function(arguments){
+
+commands
+
+return(result)
+
+}
+```
+
+### Exercise 15
+
+Write a function called `circle_area` that receives a radius and returns the corresponding area of the circle. Test your function using `radius = 1` and `radius = 5`.
+
+```{r ex15a}
+# Write your code in this code block
+
+```
+
+Write a function called `fahrenheit_to_celsius` that converts temperatures from Fahrenheit to Celsius (do a quick internet search if you can't recall the formula). Test it on
+
+- 32$^\circ$ F
+- 68$^\circ$F
+- 100$^\circ$F
+
+```{r ex15b}
+# Write your code in this code block
+
+```
+
+## Default argument values
+
+Function arguments can have default values. Consider the following function definition:
+
+```{r}
+roll_die <- function(nrolls = 1,
+                     nsides = 6){
+  sample.int(nsides,
+             size = nrolls,
+             replace = TRUE)
+}
+```
+
+Now try:
+
+```{r}
+roll_die() # single roll of a 6-sided die
+roll_die(5) # 5 rolls of 6-sided dice. 
+roll_die(nsides = 20) # 1 roll of a 20-sided die
+roll_die(10, 20) # 10 rolls of a 20-sided dice
+```
+
+### Exercise 16
+
+Modify your `circle_area()` function so that the radius defaults to 1. Check what happens when you run `circle_area()`
+
+```{r ex16}
+# Write your code in this code block
+
+```
+
+## Decisions using `if`
+
+Programs often need to make conditional decisions. The simplest decision structure in R is
+
+```r
+if(condition){
+
+commands
+
+} else {
+
+other commands
+
+}
+```
+
+Run the following example.
+
+```{r}
+temperature <- 12
+
+if(temperature < 15){
+  print("It is cold today.")
+} else {
+  print("No coat needed.")
+}
+```
+
+Notice that defining an `else {...}` is optional.
+
+
+### Exercise 17
+
+Write a function called `pass_fail` that receives a mark and returns `"Pass"` if the mark is at least 50;or returns `"Fail"` otherwise.
+
+Test your function using the values `40`, `50` and `70`.
+
+```{r ex17}
+# Write your code in this code block
+
+```
+
+
+## Vectorised decisions with `ifelse()`
+
+The ordinary `if` statement only works with a **single** logical condition. Suppose instead that we have a vector.
+
+```{r}
+marks <- c(45, 61, 72, 38, 55, 81)
+```
+
+To classify every observation simultaneously we can use
+
+```{r}
+ifelse(test = marks >= 50,
+       yes  = "Pass",
+       no   = "Fail")
+```
+
+Notice that one command processes the entire vector.
+
+### Exercise 18
+
+Given the vector
+
+```{r}
+ages <- c(12, 15, 18, 21, 34, 9)
+```
+
+use `ifelse()` to create a character vector containing `"Adult"` for ages 18 or above and `"Minor"` otherwise.
+
+```{r ex18}
+# Write your code in this code block
+
+```
+
+## Repeating computations with `for`
+
+Suppose we wish to print the first five squares. We can use the loop function `for()`:
+
+```{r}
+for(i in 1:5){
+  print(i^2)
+}
+```
+Loops become particularly useful when generating and storing results. For instance (note: there's a simpler way of doing the operation below. We'll discuss it later):
+
+Loops become particularly useful when storing results.
+
+```{r}
+# Create some example data
+scores <- data.frame(maths   = rnorm(5, 70, 8),
+                     english = rnorm(5, 68, 10),
+                     science = rnorm(5, 72, 7))
+
+# Create an empty numeric vector to store the means
+score_means <- numeric(ncol(scores))
+
+# Loop over the columns
+for(i in 1:ncol(scores)) {
+  score_means[i] <- mean(scores[[i]])
+}
+
+scores
+score_means
+```
+
+Notice that we created the output vector **before** entering the loop. This is called **preallocation**, and it is considerably faster than growing objects one element at a time.
+
+### Exercise 19
+
+Write a `for` loop to calculate the _range_ (difference between the maximum and the minimum value) of each column of the `scores` dataframe, and store the results in a vector called `ranges`.
+
+```{r ex19}
+# Write your code in this code block
+
+```
+
+## `while` loops
+
+Unlike a `for` loop, a `while` loop continues until a condition becomes `FALSE`. Try the following:
+
+```{r}
+x <- 1
+
+while(x < 100){
+  x <- x * 2
+  print(x)
+}
+```
+
+How many iterations were required?
+
+
+## Using functions inside loops
+
+The real power of programming comes from combining functions and loops. For instance, the following code generates a fractal sequence known as the _Sierpi\'nski triangle_:
+
+```{r}
+# function to randomly choose one vertex of a triangle
+choose_vertex <- function(vertices) { vertices[sample(1:3, 1), ] }
+
+# MAtrix representing a triangle with sides of length 1
+vertices <- matrix(c(0, 0,
+                     1, 0,
+                     0.5, sqrt(3)/2), 
+                   ncol = 2, byrow = TRUE)
+
+# Empty matrix to receive the results of the computations
+points <- matrix(nrow = 10000, ncol = 2)
+
+# Starting point (feel free to change it)
+points[1, ] <- c(0.2, 0.2)
+
+for(i in 2:nrow(points)) {
+  # populate next entry with a point halfway between the previous one and 
+  # a randomly selected vertex
+  vertex <- choose_vertex(vertices)
+  points[i, ] <- (points[i - 1, ] + vertex) / 2
+}
+
+# Plot the results
+plot(points, pch = ".", asp = 1)
+```
+
+
+
+### Exercise 20 (chalenge)
+
+Modify the _Sierpi\'nski triangle_ code above so that each point is coloured according to its distance from the three vertices of the triangle. Specifically:
+
+1. Inside the loop, compute the distance from each generated point to each of the three vertices. 
+- **Hint**: you may need another `for` loop inside the original one to calculate the distance between `points[i, ]` and each vertex. 
+- **Hint**: You can calculate the Euclidean distance between two vectors using `sqrt(sum((vector_1 - vector_2)^2))`
+2. Use these three distance values as the red, green, and blue (RGB) colour components. The function `rgb()` creates colours from red, green, and blue values between 0 and 1 (check `?rgb`). Store the colour valur for each point in a vector `my_cols`
+3. Plot the points using these colours (*Hint**: function `plot()` accepts a colour argument using `col = ...`)
+
+```{r ex20}
+# Write your code in this code block
+
+```
+
+## `apply()`
+
+`apply()` is designed for **matrices** (and higher-dimensional arrays). Instead of using a `for` loop, we can compute functions on each row/column simply by doing:
+
+```{r}
+# Example matrix
+m <- matrix(1:20, nrow = 4)
+
+# Mean of each column
+apply(m, MARGIN = 2, FUN = mean)
+
+# Mean of each row
+apply(m, MARGIN = 1, FUN = mean)
+```
+
+### Exercise 21
+
+Use `apply()` to compute
+
+1. the maximum (`max()`) of every row;
+
+2. the standard deviation (`std()`) of every column;
+
+
+```{r ex21}
+# Write your code in this code block
+
+```
+
+# `lapply()`
+
+`apply()` works on matrices. `lapply()` has a similar role, but it works on **lists** (also data frames, since they are just specialised lists).
+
+```{r}
+numbers <- list(a = 1:5,
+                b = 1:10,
+                c = 1:20)
+
+# mean of every list element.
+lapply(numbers, mean)
+```
+
+Notice that the output is itself a **list**.
+
+---
+
+### Exercise 22
+
+Use `lapply()` to compute the length and the sum of each element of the list `numbers`.
+
+```{r ex22}
+# Write your code in this code block
+
+```
+
+# The `map()` family
+
+The tidyverse provides a modern alternative to the `*apply()` functions through the **purrr** package.
+
+Load the package.
+
+```{r}
+# install.packages("purr") # Uncomment and install if needed
+library(purrr)
+```
+
+The basic function is `map()`:
+
+```{r}
+map(numbers, mean)
+```
+
+Like `lapply()`, this returns a list. One of the advantages of the `map()` over the `*apply()` family is that rather than trying to infer how to simplify its output automatically (which is error-prone), **purrr** provides explicit functions for different output types.
+
+```{r}
+# Always returns a vector of doubles
+map_dbl(numbers, mean)
+# Always returns a vector of integers
+map_int(numbers, length)
+```
+
+Because the output type is known in advance, these functions tend to make
+programs easier to understand and debug.
+
+---
+
+### Exercise 23
+
+Use `map_dbl()` to compute the maximum of each list element, and `map_int()` to compute the length of each element.
+
+```{r ex23}
+# Write your code in this code block
+
+```
+
+## Anonymous functions
+
+We are not restricted to built-in functions. We can define a function on the fly, as needed. For instance,
+
+```{r}
+map_dbl(numbers,
+        \(x) sum(x ^ 2))
+```
+
+Here the anonymous function computes the sum of squares of each vector.
+
+### Exercise 24 (challenge)
+
+Use `map_dbl()` with anonymous functions to compute:
+
+1. the average of the squared values;
+2. the number of even integers;
+3. the proportion of values greater than 5.
+
+```{r ex24}
+# Write your code in this code block
+
+```
+
+---
+
+Suppose we want the average of each column of a matrix
+
+```{r}
+m <- matrix(rnorm(25), nrow = 5)
+```
+
+Now compare the following (functionally equivalent) solutions:
+
+```{r}
+# ==== version 1 ====
+means <- numeric(ncol(m))
+
+for(i in seq_len(ncol(m))){
+  means[i] <- mean(m[, i])
+}
+
+means
+
+
+# ==== version 2 ====
+apply(m, 2, mean)
+```
+
+
+Which version do you find easier to read? However, keep in mind that you cannot use `apply()` or `map()` to replace all loops - when iterations are not independent (i.e., when the result of a given iteration depends on the previous ones) then you need to use the explicit loops.
+
+
+## Exercise 25 (challenge)
+
+The built-in dataset `iris` contains measurements on three flower species.
+
+```{r}
+head(iris)
+```
+
+Using **only** iteration functions (`apply()`, `lapply()`, `sapply()` or
+`map()`), calculate
+
+1. the mean of each numeric variable;
+
+2. the standard deviation of each numeric variable;
+
+3. the number of missing values in each column.
+
+**Hint**: `iris[, 1:4]` extracts the numeric columns.
+
+**Hint**: Function `is.na()` and arguments `na.rm` of the mean and standard deviation functions may be useful.
+
+```{r ex25}
+# Write your code in this code block
+
+```
